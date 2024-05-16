@@ -4,11 +4,7 @@ const cors = require('cors')
 const RegisterModel = require('./models/Register')
 
 const app = express()
-app.use(cors({
-    origin: 'http://127.0.0.1:5173', // Allow only this origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  }));
+app.use(cors());
   
 app.use(express.json())
 
