@@ -43,14 +43,14 @@ app.post('/register', async (req, res) => {
         const checkUser = await RegisterModel.findOne({ email });
 
         if (checkUser) {
-            return res.status(400).json({ message: "Email Already Used" });
+            return res.json({ message: "Email Already Used" });
         } else {
             const newUser = await RegisterModel.create({ name, email, password });
-            return res.status(201).json(newUser);
+            return res.json(newUser);
         }
     } catch (error) {
-        console.error(error);
-        // res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình tạo người dùng.' });
+        // console.error(error);
+        res.json({ message: 'Đã xảy ra lỗi trong quá trình tạo người dùng.' });
     }
 });
 
