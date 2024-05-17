@@ -4,7 +4,12 @@ const cors = require('cors');
 const userRoutes = require('./routes'); // Corrected path
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://127.0.0.1:5173', // Your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 mongoose.connect('mongodb+srv://admin:vNyLVQug8B7quWE4@cluster0.3avkh2c.mongodb.net/theMovieDb', {
