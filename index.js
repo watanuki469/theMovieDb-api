@@ -12,12 +12,12 @@ app.use(cors({
     credentials: true
 }));
 
-app.options('*', cors({
-    origin: 'http://127.0.0.1:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+// app.options('*', cors({
+//     origin: 'http://127.0.0.1:5173',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// }));
 
 app.use(express.json());
 
