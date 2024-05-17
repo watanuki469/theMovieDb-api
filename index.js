@@ -5,7 +5,7 @@ const userRoutes = require('./routes'); // Corrected path
 
 const app = express();
 app.use(cors({
-    origin: '*', // Your frontend URL
+    origin: true, //  frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
