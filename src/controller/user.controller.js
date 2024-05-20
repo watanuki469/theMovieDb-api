@@ -1,7 +1,7 @@
 // const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 
-const UserModel = require('../models/User.Model'); 
+const UserModel = require('../models/User.Model');
 
 const signUp = async (req, res) => {
   try {
@@ -45,8 +45,8 @@ const signIn = async (req, res) => {
 
     const loginUser = {
       email: checkUser.email,
-      displayName: checkUser.displayName ,
-      token:checkUser._id
+      displayName: checkUser.displayName,
+      token: checkUser._id
     };
 
     return res.json(loginUser);
@@ -55,9 +55,47 @@ const signIn = async (req, res) => {
     return res.json({ message: 'Something went wrong.' });
   }
 };
+const updatePassword = async (req, res) => {
+  try {
+    const { email, password, newPassword, confirmNewPassword } = req.body;
+
+    // Find the user by email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Wrong Email" });
+    }
+
+    // Check if the current password is valid
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Wrong password.' });
+    }
+
+    // Check if new password and confirm password match
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: 'New password and confirm password do not match.' });
+    }
+
+    // Hash the new password
+    const saltRounds = 10;
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update the user's password
+    user.password = hashedNewPassword;
+    await user.save();
+
+    // Respond with success message
+    return res.json({ message: 'Password updated successfully.' });
+  } catch (error) {
+    console.error('Error during password update:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
 
 
 module.exports = {
   signUp,
-  signIn
+  signIn,
+  updatePassword
 };
