@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const userRoutes = require('./routes'); // Corrected path
+const userRoutes = require('./src/routes'); // Corrected path
 
 const app = express();
 app.use(cors({
