@@ -4,7 +4,9 @@ const cors = require('cors');
 const userRoutes = require('./routes'); // Corrected path
 
 const app = express();
-app.use(cors())
+app.use(cors({
+    origin:'*'
+}))
 // app.use(cors({
 //     origin: 'http://127.0.0.1:5173',
 //     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
