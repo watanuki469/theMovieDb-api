@@ -45,7 +45,8 @@ const signIn = async (req, res) => {
 
     const loginUser = {
       email: checkUser.email,
-      displayName: checkUser.displayName // Include displayName from the user document
+      displayName: checkUser.displayName ,
+      token:checkUser._id
     };
 
     return res.json(loginUser);
