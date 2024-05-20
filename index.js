@@ -5,7 +5,10 @@ const userRoutes = require('./routes'); // Corrected path
 
 const app = express();
 app.use(cors({
-    origin:'*'
+    origin: '*',
+    methods: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }))
 // app.use(cors({
 //     origin: 'http://127.0.0.1:5173',
