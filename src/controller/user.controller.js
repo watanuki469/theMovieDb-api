@@ -1,7 +1,7 @@
 // const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 
-const UserModel = require('../models/User.Model'); // Corrected path
+const UserModel = require('../models/User.Model'); 
 
 const signUp = async (req, res) => {
   try {
