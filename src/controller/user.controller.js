@@ -42,7 +42,11 @@ const signIn = async (req, res) => {
     if (!isPasswordValid) {
       return res.json({ message: 'Wrong password.' });
     }
-    const loginUser = new UserModel({ email, password });
+
+    const loginUser = {
+      email: checkUser.email,
+      displayName: checkUser.displayName // Include displayName from the user document
+    };
 
     return res.json(loginUser);
   } catch (error) {
@@ -50,6 +54,7 @@ const signIn = async (req, res) => {
     return res.json({ message: 'Something went wrong.' });
   }
 };
+
 
 module.exports = {
   signUp,
