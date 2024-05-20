@@ -42,8 +42,9 @@ const signIn = async (req, res) => {
     if (!isPasswordValid) {
       return res.json({ message: 'Wrong password.' });
     }
+    const loginUser = new UserModel({ email, password });
 
-    return res.json({ message: "Login Success" });
+    return res.json(loginUser);
   } catch (error) {
     console.error('Error during login:', error);
     return res.json({ message: 'Something went wrong.' });
