@@ -110,7 +110,7 @@ const addFavoriteItem = async (req, res) => {
     if (isFavorite) {
       user.favorites = user.favorites.filter(fav => fav.itemId !== movieId);
       await user.save();
-      return res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
+      return res.json({ message: `Removed from watch list successfully`, favorites: user.favorites,isFavorite });
     } else {
       user.favorites.push({
         itemId: movieId,
@@ -118,7 +118,7 @@ const addFavoriteItem = async (req, res) => {
         itemName: movieName
       });
       await user.save();
-      return res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
+      return res.json({ message: `Added to watch list successfully`, favorites: user.favorites,isFavorite });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
@@ -135,7 +135,7 @@ const getFavoriteItem = async (req, res) => {
         return res.status(404).json({ message: `User with email ${email} does not exist` });
       }
 
-      return res.json({  message: `Added ${email} to watch list successfully`, });
+      return res.json({  message: `Added to watch list successfully`, });
     } catch (error) {
       console.error('Error fetching favorites:', error);
       return res.status(500).json({ message: 'Something went wrong.' });
