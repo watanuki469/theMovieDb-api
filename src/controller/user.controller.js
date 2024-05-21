@@ -127,32 +127,31 @@ const addFavoriteItem = async (req, res) => {
     return res.status(500).json({ message: 'Something went wrong.' });
   }
 }
-const getFavoriteItem = async (req, res) => {
-  try {
-    const { email } = req.query; // assuming the email is passed as a query parameter
+// const getFavoriteItem = async (req, res) => {
+//   try {
+//     const { email } = req.query; // assuming the email is passed as a query parameter
 
-    try {
-      const user = await UserModel.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ message: `User with email ${email} does not exist` });
-      }
+//     try {
+//       const user = await UserModel.findOne({ email });
+//       if (!user) {
+//         return res.status(404).json({ message: `User with email ${email} does not exist` });
+//       }
 
-      return res.json({ favorites: user.favorites });
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-      return res.status(500).json({ message: 'Something went wrong.' });
-    }
-  }
-  catch (error) {
-    console.error('Error during get favorite list:', error);
-    return res.json({ message: 'Something went wrong.' });
-  }
-}
+//       return res.json({ favorites: user.favorites });
+//     } catch (error) {
+//       console.error('Error fetching favorites:', error);
+//       return res.status(500).json({ message: 'Something went wrong.' });
+//     }
+//   }
+//   catch (error) {
+//     console.error('Error during get favorite list:', error);
+//     return res.json({ message: 'Something went wrong.' });
+//   }
+// }
 
 module.exports = {
   signUp,
   signIn,
   updatePassword,
   addFavoriteItem,
-  getFavoriteItem
 };
