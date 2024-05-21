@@ -110,8 +110,7 @@ const addFavoriteItem = async (req, res) => {
     if (isFavorite) {
       user.favorites = user.favorites.filter(fav => fav.itemId !== movieId);
       await user.save();
-      return isFavorite
-      //  res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
+      return res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
     } else {
       user.favorites.push({
         itemId: movieId,
@@ -119,39 +118,39 @@ const addFavoriteItem = async (req, res) => {
         itemName: movieName
       });
       await user.save();
-      return isFavorite
-      //  res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
+      return res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
     return res.status(500).json({ message: 'Something went wrong.' });
   }
 }
-// const getFavoriteItem = async (req, res) => {
-//   try {
-//     const { email } = req.query; // assuming the email is passed as a query parameter
+const getFavoriteItem = async (req, res) => {
+  try {
+    const { email } = req.query; // assuming the email is passed as a query parameter
 
-//     try {
-//       const user = await UserModel.findOne({ email });
-//       if (!user) {
-//         return res.status(404).json({ message: `User with email ${email} does not exist` });
-//       }
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: `User with email ${email} does not exist` });
+      }
 
-//       return res.json({ favorites: user.favorites });
-//     } catch (error) {
-//       console.error('Error fetching favorites:', error);
-//       return res.status(500).json({ message: 'Something went wrong.' });
-//     }
-//   }
-//   catch (error) {
-//     console.error('Error during get favorite list:', error);
-//     return res.json({ message: 'Something went wrong.' });
-//   }
-// }
+      return res.json({  message: `Added ${email} to watch list successfully`, });
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+      return res.status(500).json({ message: 'Something went wrong.' });
+    }
+  }
+  catch (error) {
+    console.error('Error during get favorite list:', error);
+    return res.json({ message: 'Something went wrong.' });
+  }
+}
 
 module.exports = {
   signUp,
   signIn,
   updatePassword,
   addFavoriteItem,
+  getFavoriteItem
 };
