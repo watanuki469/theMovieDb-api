@@ -16,4 +16,7 @@ router.post(
   "/updatePassword", userController.updatePassword
 );
 
+router.post('/addFavorite', userController.addFavoriteItem);
+
+
 module.exports = router;
