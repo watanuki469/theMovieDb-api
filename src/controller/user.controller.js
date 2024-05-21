@@ -95,36 +95,6 @@ const updatePassword = async (req, res) => {
   }
 };
 
-// const addFavoriteItem = async (req, res) => {
-//   const { email, movie, mediaType, movieName } = req.body;
-
-//   try {
-//     const user = await UserModel.findOne({ email });
-//     if (!user) {
-//       return res.json({ message: "Email Not Exist" });
-//     }
-
-//     const movieId = movie;
-
-//     const isFavorite = user.favorites.some(fav => fav?.itemId?.equals(movieId));
-//     if (isFavorite) {
-//       user.favorites = user.favorites.filter(fav => !fav.itemId.equals(movieId));
-//       await user.save();
-//       return res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
-//     } else {
-//       user.favorites.push({
-//         itemId: movieId,
-//         itemType: mediaType,
-//         itemName:movieName
-//       });
-//       await user.save();
-//       return res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
-//     }
-//   } catch (error) {
-//     console.error('Error handling watchlist:', error);
-//     return res.status(500).json({ message: 'Something went wrong.' });
-//   }
-// }
 const addFavoriteItem = async (req, res) => {
   const { email, movie, mediaType, movieName } = req.body;
 
@@ -140,7 +110,8 @@ const addFavoriteItem = async (req, res) => {
     if (isFavorite) {
       user.favorites = user.favorites.filter(fav => fav.itemId !== movieId);
       await user.save();
-      return res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
+      return isFavorite
+      //  res.json({ message: `Removed ${movieName} from watch list successfully`, favorites: user.favorites });
     } else {
       user.favorites.push({
         itemId: movieId,
@@ -148,18 +119,40 @@ const addFavoriteItem = async (req, res) => {
         itemName: movieName
       });
       await user.save();
-      return res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
+      return isFavorite
+      //  res.json({ message: `Added ${movieName} to watch list successfully`, favorites: user.favorites });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
     return res.status(500).json({ message: 'Something went wrong.' });
   }
 }
+const getFavoriteItem = async (req, res) => {
+  try {
+    const { email } = req.query; // assuming the email is passed as a query parameter
 
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: `User with email ${email} does not exist` });
+      }
+
+      return res.json({ favorites: user.favorites });
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+      return res.status(500).json({ message: 'Something went wrong.' });
+    }
+  }
+  catch (error) {
+    console.error('Error during get favorite list:', error);
+    return res.json({ message: 'Something went wrong.' });
+  }
+}
 
 module.exports = {
   signUp,
   signIn,
   updatePassword,
-  addFavoriteItem
+  addFavoriteItem,
+  getFavoriteItem
 };

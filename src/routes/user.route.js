@@ -17,6 +17,7 @@ router.post(
 );
 
 router.post('/addFavorite', userController.addFavoriteItem);
+router.get('/getFavorite', userController.getFavoriteItem);
 
 
 module.exports = router;
