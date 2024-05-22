@@ -128,7 +128,7 @@ const addFavoriteItem = async (req, res) => {
 
 const getFavoriteItem = async (req, res) => {
   try {
-    const { email } = req.body;    
+    const { email } = req.query;    
     try {
       const user = await UserModel.findOne({ email });
       if (!user) {
