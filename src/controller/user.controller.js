@@ -96,7 +96,7 @@ const updatePassword = async (req, res) => {
 };
 
 const addFavoriteItem = async (req, res) => {
-  const { email, movie, mediaType, movieName } = req.body;
+  const { email, movieId, mediaType, movieName } = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
@@ -104,13 +104,11 @@ const addFavoriteItem = async (req, res) => {
       return res.json({ message: "Email Not Exist" });
     }
 
-    const movieId = movie;
-
     const isFavorite = user.favorites.some(fav => fav?.itemId === movieId);
     if (isFavorite) {
       user.favorites = user.favorites.filter(fav => fav.itemId !== movieId);
       await user.save();
-      return res.json({ favorites: isFavorite });
+      return res.json({ favorites: user });
     } else {
       user.favorites.push({
         itemId: movieId,
@@ -118,7 +116,7 @@ const addFavoriteItem = async (req, res) => {
         itemName: movieName
       });
       await user.save();
-      return res.json({ favorites: isFavorite });
+      return res.json({ favorites: user });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
