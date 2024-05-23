@@ -96,12 +96,11 @@ const updatePassword = async (req, res) => {
 };
 
 const addFavoriteItem = async (req, res) => {
-  const { email, movieId, mediaType, movieName } = req.query;
-
+  const { email, movieId, mediaType, movieName } = req.body;
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.json({ message: "Email Not Exist" });
+      return res.json({ message: `Email ${email} Not Exist` });
     }
 
     const isFavorite = user.favorites.some(fav => fav?.itemId === movieId);
