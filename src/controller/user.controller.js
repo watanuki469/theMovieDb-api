@@ -96,7 +96,7 @@ const updatePassword = async (req, res) => {
 };
 
 const addFavoriteItem = async (req, res) => {
-  const { email, movieId, mediaType, movieName } = req.body;
+  const { email, movieId, mediaType, movieName } = req.query;
 
   try {
     const user = await UserModel.findOne({ email });
