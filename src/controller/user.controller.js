@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const UserModel = require('../models/User.Model');
-const MovieModel = require('../models/Movie.Model');
-const TVShowModel = require('../models/Tv.Model');
 
 const signUp = async (req, res) => {
   try {
@@ -123,14 +121,17 @@ const updatePassword = async (req, res) => {
 //   }
 // }
 const addFavoriteItem = async (req, res) => {
-  const { email, movieId, mediaType, movieName } = req.body; // Assuming req.body instead of req.query
+  const { email, movieId, mediaType, movieName,
+    movieImg,movieReleaseDay,
+    movieGenre,movieReview,moviePopularity,
+    movieVoteAverage,movieVoteCount
+   } = req.body; // Assuming req.body instead of req.query
 
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.json({ message: `Email ${email} Not Exist` });
     }
-
 
     const existingIndex = user.favorites.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
@@ -143,7 +144,14 @@ const addFavoriteItem = async (req, res) => {
       user.favorites.push({
         itemId: movieId,
         itemType: mediaType,
-        itemName: movieName
+        itemName: movieName,
+        itemImg: movieImg,
+        itemReleaseDay: movieReleaseDay,
+        itemGenre: movieGenre,
+        itemReview: movieReview,
+        itemPopularity: moviePopularity,
+        itemVoteAverage: movieVoteAverage,
+        itemVoteCount: movieVoteCount
       });
       await user.save();
       return res.json({ favorites: user.favorites });
