@@ -5,7 +5,7 @@ const userRoutes = require('./src/routes'); // Corrected path
 
 const app = express();
 const corsOptions = {
-    origin: 'https://themoviedb-five.vercel.app',
+    origin: 'http://127.0.0.1:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
