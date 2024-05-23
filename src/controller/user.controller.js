@@ -131,7 +131,8 @@ const addFavoriteItem = async (req, res) => {
       return res.json({ message: `Email ${email} Not Exist` });
     }
 
-    const existingIndex = user.favorites.findIndex(fav => fav.itemId === movieId);
+
+    const existingIndex = user.favorites.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
       // Item exists, remove it
       user.favorites.splice(existingIndex, 1);
@@ -149,14 +150,14 @@ const addFavoriteItem = async (req, res) => {
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
-    return res.status(500).json({ message: 'Something went wrong.' });
+    return res.status(500).json({ message: 'Something went meomeo.' });
   }
 };
 
 
 const getFavoriteItem = async (req, res) => {
   try {
-    const { email } = req.query;    
+    const { email } = req.query;
     try {
       const user = await UserModel.findOne({ email });
       if (!user) {
