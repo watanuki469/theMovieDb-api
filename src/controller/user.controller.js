@@ -1,6 +1,10 @@
 // const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
+const axios = require('axios');
+
+
 
 const UserModel = require('../models/User.Model');
 
@@ -162,7 +166,6 @@ const addFavoriteItem = async (req, res) => {
   }
 };
 
-
 const getFavoriteItem = async (req, res) => {
   try {
     const { email } = req.query;
@@ -185,10 +188,8 @@ const getFavoriteItem = async (req, res) => {
 }
 
 const addFavoriteActor = async (req, res) => {
-  const { email, movieId, movieName,
-    movieImg, movieReleaseDay,
-    movieReview, moviePopularity,
-    movieKnowFor
+  const {
+     email, movieId, movieName, movieImg, movieReleaseDay, movieReview, moviePopularity, movieKnowFor
   } = req.body; // Assuming req.body instead of req.query
 
   try {
@@ -223,7 +224,6 @@ const addFavoriteActor = async (req, res) => {
   }
 };
 
-
 const getFavoriteActor = async (req, res) => {
   try {
     const { email } = req.query;
@@ -245,15 +245,19 @@ const getFavoriteActor = async (req, res) => {
   }
 }
 
+
 const addRecentlyViewed = async (req, res) => {
-  const { email, movieId, movieName,movieImg, movieType } = req.body; // Assuming req.body instead of req.query
+  const { email, movieId, movieName, movieImg, movieType } = req.body; // Assuming req.body instead of req.query
 
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.json({ message: `Email ${email} Not Exist` });
     }
-
+    // const createdTime = moment().tz('Asia/Ho_Chi_Minh').toISOString(); 
+    const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
+    const createdTime = timezoneResponse.data.datetime;
+    
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
       // Item exists, remove it
@@ -262,17 +266,16 @@ const addRecentlyViewed = async (req, res) => {
       return res.json({ recentlyViewed: user.recentlyViewed });
     } else {
       // Item does not exist, add it
-      const createdTime = new Date().toISOString();
+      
       user.recentlyViewed.push({
         itemId: movieId,
         itemName: movieName,
         itemImg: movieImg,
         itemType: movieType,
         createdTime: createdTime
-
       });
       await user.save();
-      return res.json({ recentlyViewed: user.recentlyViewed });
+      return res.json({ recentlyViewed: user.recentlyViewed ,createdTime});
     }
   } catch (error) {
     console.error('Error handling recently view list:', error);
