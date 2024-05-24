@@ -258,13 +258,8 @@ const addRecentlyViewed = async (req, res) => {
     
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
-      // Item exists, remove it
-      user.recentlyViewed.splice(existingIndex, 1);
-      await user.save();
       return res.json({ recentlyViewed: user.recentlyViewed });
-    } else {
-      // Item does not exist, add it
-      
+    } else {      
       user.recentlyViewed.push({
         itemId: movieId,
         itemName: movieName,
@@ -273,7 +268,7 @@ const addRecentlyViewed = async (req, res) => {
         createdTime: createdTime
       });
       await user.save();
-      return res.json({ recentlyViewed: user.recentlyViewed ,createdTime});
+      return res.json({ recentlyViewed: user.recentlyViewed});
     }
   } catch (error) {
     console.error('Error handling recently view list:', error);
