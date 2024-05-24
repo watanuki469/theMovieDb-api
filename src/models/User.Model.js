@@ -16,6 +16,15 @@ const UserSchema = new mongoose.Schema({
         itemVoteAverage:{type:String},
         itemVoteCount:{type:String},   
     }],
+    favoritesActor: [{
+        itemId: { type: String },
+        itemName: { type: String },       
+        itemImg:{type:String},
+        itemReleaseDay:{type:Date},
+        itemReview:{type:String},
+        itemPopularity:{type:String},
+        itemKnowFor:{type:String}
+    }],
     rating: [{
         itemId: { type: String },
         itemType: { type: String, enum: ['Movie', 'TV'] },

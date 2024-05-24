@@ -184,10 +184,73 @@ const getFavoriteItem = async (req, res) => {
   }
 }
 
+const addFavoriteActor = async (req, res) => {
+  const { email, movieId, movieName,
+    movieImg,movieReleaseDay,
+    movieReview,moviePopularity,
+    movieKnowFor
+   } = req.body; // Assuming req.body instead of req.query
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({ message: `Email ${email} Not Exist` });
+    }
+
+    const existingIndex = user.favoritesActor.findIndex(fav => fav.itemId == movieId);
+    if (existingIndex !== -1) {
+      // Item exists, remove it
+      user.favoritesActor.splice(existingIndex, 1);
+      await user.save();
+      return res.json({ favoritesActor: user.favoritesActor });
+    } else {
+      // Item does not exist, add it
+      user.favoritesActor.push({
+        itemId: movieId,
+        itemName: movieName,
+        itemImg: movieImg,
+        itemReleaseDay: movieReleaseDay,
+        itemReview: movieReview,
+        itemPopularity: moviePopularity,
+        itemKnowFor: movieKnowFor,
+      });
+      await user.save();
+      return res.json({ favoritesActor: user.favoritesActor });
+    }
+  } catch (error) {
+    console.error('Error handling watchlist:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
+
+const getFavoriteActor = async (req, res) => {
+  try {
+    const { email } = req.query;
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: `User with email ${email} does not exist` });
+      }
+
+      return res.json({ favoritesActor: user.favoritesActor });
+    } catch (error) {
+      console.error('Error fetching favorites actor:', error);
+      return res.status(500).json({ message: 'Something went wrong.' });
+    }
+  }
+  catch (error) {
+    console.error('Error during get favorite actor list:', error);
+    return res.json({ message: 'Something went wrong.' });
+  }
+}
+
 module.exports = {
   signUp,
   signIn,
   updatePassword,
   addFavoriteItem,
-  getFavoriteItem
+  getFavoriteItem,
+  addFavoriteActor,
+  getFavoriteActor
 };
