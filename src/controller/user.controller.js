@@ -253,6 +253,9 @@ const addRecentlyViewed = async (req, res) => {
     if (!user) {
       return res.json({ message: `Email ${email} Not Exist` });
     }
+    if (!movieId) {
+      return res.json({ message: `Id Not Exist` });
+    }
     const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
     const createdTime = timezoneResponse.data.datetime;
     
