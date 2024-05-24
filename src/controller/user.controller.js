@@ -1,7 +1,6 @@
 // const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');
 const axios = require('axios');
 
 
@@ -254,7 +253,6 @@ const addRecentlyViewed = async (req, res) => {
     if (!user) {
       return res.json({ message: `Email ${email} Not Exist` });
     }
-    // const createdTime = moment().tz('Asia/Ho_Chi_Minh').toISOString(); 
     const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
     const createdTime = timezoneResponse.data.datetime;
     
