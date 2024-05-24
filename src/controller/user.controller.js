@@ -122,10 +122,10 @@ const updatePassword = async (req, res) => {
 // }
 const addFavoriteItem = async (req, res) => {
   const { email, movieId, mediaType, movieName,
-    movieImg,movieReleaseDay,
-    movieGenre,movieReview,moviePopularity,
-    movieVoteAverage,movieVoteCount
-   } = req.body; // Assuming req.body instead of req.query
+    movieImg, movieReleaseDay,
+    movieGenre, movieReview, moviePopularity,
+    movieVoteAverage, movieVoteCount
+  } = req.body; // Assuming req.body instead of req.query
 
   try {
     const user = await UserModel.findOne({ email });
@@ -186,10 +186,10 @@ const getFavoriteItem = async (req, res) => {
 
 const addFavoriteActor = async (req, res) => {
   const { email, movieId, movieName,
-    movieImg,movieReleaseDay,
-    movieReview,moviePopularity,
+    movieImg, movieReleaseDay,
+    movieReview, moviePopularity,
     movieKnowFor
-   } = req.body; // Assuming req.body instead of req.query
+  } = req.body; // Assuming req.body instead of req.query
 
   try {
     const user = await UserModel.findOne({ email });
@@ -245,6 +245,63 @@ const getFavoriteActor = async (req, res) => {
   }
 }
 
+const addRecentlyViewed = async (req, res) => {
+  const { email, movieId, movieName,movieImg, movieType } = req.body; // Assuming req.body instead of req.query
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({ message: `Email ${email} Not Exist` });
+    }
+
+    const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
+    if (existingIndex !== -1) {
+      // Item exists, remove it
+      user.recentlyViewed.splice(existingIndex, 1);
+      await user.save();
+      return res.json({ recentlyViewed: user.recentlyViewed });
+    } else {
+      // Item does not exist, add it
+      const createdTime = new Date().toISOString();
+      user.recentlyViewed.push({
+        itemId: movieId,
+        itemName: movieName,
+        itemImg: movieImg,
+        itemType: movieType,
+        createdTime: createdTime
+
+      });
+      await user.save();
+      return res.json({ recentlyViewed: user.recentlyViewed });
+    }
+  } catch (error) {
+    console.error('Error handling recently view list:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
+
+const getRecentlyViewed = async (req, res) => {
+  try {
+    const { email } = req.query;
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: `User with email ${email} does not exist` });
+      }
+
+      return res.json({ favoritesActor: user.recentlyViewed });
+    } catch (error) {
+      console.error('Error fetching favorites actor:', error);
+      return res.status(500).json({ message: 'Something went wrong.' });
+    }
+  }
+  catch (error) {
+    console.error('Error during get favorite actor list:', error);
+    return res.json({ message: 'Something went wrong.' });
+  }
+}
+
 module.exports = {
   signUp,
   signIn,
@@ -252,5 +309,7 @@ module.exports = {
   addFavoriteItem,
   getFavoriteItem,
   addFavoriteActor,
-  getFavoriteActor
+  getFavoriteActor,
+  addRecentlyViewed,
+  getRecentlyViewed
 };

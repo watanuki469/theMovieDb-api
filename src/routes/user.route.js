@@ -22,5 +22,8 @@ router.get('/getFavorite', userController.getFavoriteItem);
 router.post('/addFavoriteActor', userController.addFavoriteActor);
 router.get('/getFavoriteActor', userController.getFavoriteActor);
 
+router.post('/addRecentlyViewed', userController.addRecentlyViewed);
+router.get('/getRecentlyViewed', userController.getRecentlyViewed);
+
 
 module.exports = router;

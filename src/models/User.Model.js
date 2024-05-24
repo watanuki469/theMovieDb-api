@@ -25,6 +25,12 @@ const UserSchema = new mongoose.Schema({
         itemPopularity:{type:String},
         itemKnowFor:{type:String}
     }],
+    recentlyViewed: [{
+        itemId: { type: String },
+        itemName: { type: String },       
+        itemImg:{type:String},
+        itemType: { type: String, enum: ['Movie', 'TV','Person'] },
+    }],
     rating: [{
         itemId: { type: String },
         itemType: { type: String, enum: ['Movie', 'TV'] },
