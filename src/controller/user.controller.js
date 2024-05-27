@@ -289,7 +289,7 @@ const getRecentlyViewed = async (req, res) => {
         return res.status(404).json({ message: `User with email ${email} does not exist` });
       }
 
-      return res.json({ favoritesActor: user.recentlyViewed });
+      return res.json({ recentlyViewedList: user.recentlyViewed });
     } catch (error) {
       console.error('Error fetching favorites actor:', error);
       return res.status(500).json({ message: 'Something went wrong.' });
