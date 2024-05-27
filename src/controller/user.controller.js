@@ -202,7 +202,7 @@ const addFavoriteActor = async (req, res) => {
       // Item exists, remove it
       user.favoritesActor.splice(existingIndex, 1);
       await user.save();
-      return res.json({ favoritesActor: user.favoritesActor });
+      return res.json({ favoritesActor: user.favoritesActor,alert:`${movieName} has been remove from watchlist` });
     } else {
       // Item does not exist, add it
       user.favoritesActor.push({
@@ -215,7 +215,7 @@ const addFavoriteActor = async (req, res) => {
         itemKnowFor: movieKnowFor,
       });
       await user.save();
-      return res.json({ favoritesActor: user.favoritesActor });
+      return res.json({ favoritesActor: user.favoritesActor,alert:`${movieName} has been added to watchlist` });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
@@ -301,6 +301,41 @@ const getRecentlyViewed = async (req, res) => {
   }
 }
 
+const removeRecentlyViewed = async (req, res) => {
+  const { email, movieId, movieType,removeAll } = req.body; // Assuming req.body instead of req.query
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({ message: `Email ${email} Not Exist` });
+    }
+    if (!movieId) {
+      return res.json({ message: `Id Not Exist` });
+    }
+    if (removeAll === 'true') {
+      user.recentlyViewed = [];
+      await user.save();
+      return res.json({ recentlyViewed: user.recentlyViewed });
+    }
+
+    const existingIndex = user.recentlyViewed.findIndex(
+      item => item.itemId == movieId && item.itemType == movieType
+    );
+
+    if (existingIndex !== -1) {
+      user.recentlyViewed.splice(existingIndex, 1);
+      await user.save();
+      return res.json({ recentlyViewed: user.recentlyViewed });
+    } else {
+      return res.json({ message: `Item with id ${movieId} and type ${movieType} not found` });
+    }
+  } catch (error) {
+    console.error('Error handling recently view list:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
+
 module.exports = {
   signUp,
   signIn,
@@ -310,5 +345,6 @@ module.exports = {
   addFavoriteActor,
   getFavoriteActor,
   addRecentlyViewed,
-  getRecentlyViewed
+  getRecentlyViewed,
+  removeRecentlyViewed
 };
