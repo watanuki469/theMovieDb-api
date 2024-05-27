@@ -28,6 +28,7 @@ router.post('/removeRecentlyViewed', userController.removeRecentlyViewed);
 
 router.post('/addRating', userController.addRating);
 router.get('/getRating', userController.getRating);
+router.post('/removeRating', userController.removeRating);
 
 
 

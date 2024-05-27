@@ -381,6 +381,34 @@ const getRating = async (req, res) => {
     return res.json({ message: 'Something went wrong.' });
   }
 }
+const removeRating = async (req, res) => {
+  const { email, movieId, movieType } = req.body; // Assuming req.body instead of req.query
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({ message: `Email ${email} Not Exist` });
+    }
+    if (!movieId) {
+      return res.json({ message: `Id Not Exist` });
+    }
+
+    const existingIndex = user.rating.findIndex(
+      item => item.itemId == movieId && item.itemType == movieType
+    );
+
+    if (existingIndex !== -1) {
+      user.rating.splice(existingIndex, 1);
+      await user.save();
+      return res.json({ rating: user.rating });
+    } else {
+      return res.json({ message: `Item with id ${movieId} and type ${movieType} not found` });
+    }
+  } catch (error) {
+    console.error('Error handling recently view list:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
 
 
 
@@ -396,5 +424,6 @@ module.exports = {
   getRecentlyViewed,
   removeRecentlyViewed,
   addRating,
-  getRating
+  getRating,
+  removeRating
 };
