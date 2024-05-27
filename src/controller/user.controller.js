@@ -335,6 +335,54 @@ const removeRecentlyViewed = async (req, res) => {
   }
 };
 
+const addRating =async (req, res) => {
+  const { email, itemId, itemType, itemRating } = req.body;
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({ message: `Email ${email} Not Exist` });
+    }
+
+    const existingRatingIndex = user.rating.findIndex(
+      (rating) => rating.itemId == itemId && rating.itemType == itemType
+    );
+
+    if (existingRatingIndex !== -1) {
+      user.rating[existingRatingIndex].itemRating = itemRating;
+    } else {
+      user.rating.push({ itemId, itemType, itemRating });
+    }
+
+    await user.save();
+    return res.json({ rating: user.rating });
+  } catch (error) {
+    console.error('Error handling ratings:', error);
+    return res.status(500).json({ message: 'Something went wrong.' });
+  }
+}
+const getRating = async (req, res) => {
+  try {
+    const { email } = req.query;
+    try {
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: `User with email ${email} does not exist` });
+      }
+
+      return res.json({ ratingList: user.rating });
+    } catch (error) {
+      console.error('Error fetching favorites actor:', error);
+      return res.status(500).json({ message: 'Something went wrong.' });
+    }
+  }
+  catch (error) {
+    console.error('Error during get favorite actor list:', error);
+    return res.json({ message: 'Something went wrong.' });
+  }
+}
+
+
 
 module.exports = {
   signUp,
@@ -346,5 +394,7 @@ module.exports = {
   getFavoriteActor,
   addRecentlyViewed,
   getRecentlyViewed,
-  removeRecentlyViewed
+  removeRecentlyViewed,
+  addRating,
+  getRating
 };
