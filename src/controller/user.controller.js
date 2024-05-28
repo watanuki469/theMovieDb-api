@@ -141,7 +141,7 @@ const addFavoriteItem = async (req, res) => {
       // Item exists, remove it
       user.favorites.splice(existingIndex, 1);
       await user.save();
-      return res.alert(`Remove ${movieName} success`);
+      return res.json({ favorites: user.favorites ,alert:`Remove ${movieName} success`});
     } else {
       // Item does not exist, add it
       user.favorites.push({
@@ -157,11 +157,10 @@ const addFavoriteItem = async (req, res) => {
         itemVoteCount: movieVoteCount
       });
       await user.save();
-      return res.alert(`Added ${movieName} success`);
+      return res.json({ favorites: user.favorites,alert:`Added ${movieName} success` });
     }
   } catch (error) {
-    console.error('Error handling watchlist:', error);
-    return res.status(500).json({ message: 'Something went meomeo.' });
+    return res.status(500).json({ message: `Something went meomeo.${error}` });
   }
 };
 
