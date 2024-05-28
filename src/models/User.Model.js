@@ -36,7 +36,10 @@ const UserSchema = new mongoose.Schema({
     rating: [{
         itemId: { type: String },
         itemType: { type: String, enum: ['Movie', 'TV'] },
-        itemRating: { type: Number }
+        itemRating: { type: Number },
+        itemImg: { type: String },
+        itemName: { type: String },
+
           
     }]
 });

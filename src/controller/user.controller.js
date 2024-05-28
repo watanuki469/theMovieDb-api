@@ -339,7 +339,7 @@ const removeRecentlyViewed = async (req, res) => {
 };
 
 const addRating =async (req, res) => {
-  const { email, itemId, itemType, itemRating } = req.body;
+  const { email, itemId, itemType, itemRating,itemImg,itemName } = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
@@ -354,7 +354,7 @@ const addRating =async (req, res) => {
     if (existingRatingIndex !== -1) {
       user.rating[existingRatingIndex].itemRating = itemRating;
     } else {
-      user.rating.push({ itemId, itemType, itemRating });
+      user.rating.push({ itemId, itemType, itemRating,itemImg,itemName });
     }
 
     await user.save();
