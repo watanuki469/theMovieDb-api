@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-
-
 const UserModel = require('../models/User.Model');
 
 const signUp = async (req, res) => {
