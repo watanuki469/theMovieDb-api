@@ -135,11 +135,14 @@ const addFavoriteItem = async (req, res) => {
     }
 
     const existingIndex = user.favorites.findIndex(fav => fav.itemId == movieId);
+    const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
+    const createdTime = timezoneResponse.data.datetime;
+
     if (existingIndex !== -1) {
       // Item exists, remove it
       user.favorites.splice(existingIndex, 1);
       await user.save();
-      return res.json({ favorites: user.favorites ,alert:`Remove ${movieName} success`});
+      return res.json({ favorites: user.favorites, alert: `Remove ${movieName} success` });
     } else {
       // Item does not exist, add it
       user.favorites.push({
@@ -152,10 +155,11 @@ const addFavoriteItem = async (req, res) => {
         itemReview: movieReview,
         itemPopularity: moviePopularity,
         itemVoteAverage: movieVoteAverage,
-        itemVoteCount: movieVoteCount
+        itemVoteCount: movieVoteCount,
+        createdTime: createdTime
       });
       await user.save();
-      return res.json({ favorites: user.favorites,alert:`Added ${movieName} success` });
+      return res.json({ favorites: user.favorites, alert: `Added ${movieName} success` });
     }
   } catch (error) {
     return res.status(500).json({ message: `Something went meomeo.${error}` });
@@ -185,7 +189,7 @@ const getFavoriteItem = async (req, res) => {
 
 const addFavoriteActor = async (req, res) => {
   const {
-     email, movieId, movieName, movieImg, movieReleaseDay, movieReview, moviePopularity, movieKnowFor
+    email, movieId, movieName, movieImg, movieReleaseDay, movieReview, moviePopularity, movieKnowFor
   } = req.body; // Assuming req.body instead of req.query
 
   try {
@@ -195,11 +199,13 @@ const addFavoriteActor = async (req, res) => {
     }
 
     const existingIndex = user.favoritesActor.findIndex(fav => fav.itemId == movieId);
+    const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
+    const createdTime = timezoneResponse.data.datetime;
     if (existingIndex !== -1) {
       // Item exists, remove it
       user.favoritesActor.splice(existingIndex, 1);
       await user.save();
-      return res.json({ favoritesActor: user.favoritesActor,alert:`${movieName} has been remove from watchlist` });
+      return res.json({ favoritesActor: user.favoritesActor, alert: `${movieName} has been remove from watchlist` });
     } else {
       // Item does not exist, add it
       user.favoritesActor.push({
@@ -210,9 +216,10 @@ const addFavoriteActor = async (req, res) => {
         itemReview: movieReview,
         itemPopularity: moviePopularity,
         itemKnowFor: movieKnowFor,
+        createdTime: createdTime
       });
       await user.save();
-      return res.json({ favoritesActor: user.favoritesActor,alert:`${movieName} has been added to watchlist` });
+      return res.json({ favoritesActor: user.favoritesActor, alert: `${movieName} has been added to watchlist` });
     }
   } catch (error) {
     console.error('Error handling watchlist:', error);
@@ -255,14 +262,14 @@ const addRecentlyViewed = async (req, res) => {
     }
     const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
     const createdTime = timezoneResponse.data.datetime;
-    
+
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
       // return res.json({ recentlyViewed: user.recentlyViewed });
-      return 
+      return
       user.recentlyViewed[existingIndex]
       // stop here
-    } else {      
+    } else {
       user.recentlyViewed.push({
         itemId: movieId,
         itemName: movieName,
@@ -271,7 +278,7 @@ const addRecentlyViewed = async (req, res) => {
         createdTime: createdTime
       });
       await user.save();
-      return res.json({ recentlyViewed: user.recentlyViewed});
+      return res.json({ recentlyViewed: user.recentlyViewed });
     }
   } catch (error) {
     console.error('Error handling recently view list:', error);
@@ -302,7 +309,7 @@ const getRecentlyViewed = async (req, res) => {
 }
 
 const removeRecentlyViewed = async (req, res) => {
-  const { email, movieId, movieType,removeAll } = req.body; // Assuming req.body instead of req.query
+  const { email, movieId, movieType, removeAll } = req.body; // Assuming req.body instead of req.query
 
   try {
     const user = await UserModel.findOne({ email });
@@ -335,8 +342,8 @@ const removeRecentlyViewed = async (req, res) => {
   }
 };
 
-const addRating =async (req, res) => {
-  const { email, itemId, itemType, itemRating,itemImg,itemName } = req.body;
+const addRating = async (req, res) => {
+  const { email, itemId, itemType, itemRating, itemImg, itemName } = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
@@ -347,11 +354,13 @@ const addRating =async (req, res) => {
     const existingRatingIndex = user.rating.findIndex(
       (rating) => rating.itemId == itemId && rating.itemType == itemType
     );
+    const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
+    const createdTime = timezoneResponse.data.datetime;
 
     if (existingRatingIndex !== -1) {
       user.rating[existingRatingIndex].itemRating = itemRating;
     } else {
-      user.rating.push({ itemId, itemType, itemRating,itemImg,itemName });
+      user.rating.push({ itemId, itemType, itemRating, itemImg, itemName,createdTime });
     }
 
     await user.save();

@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
         itemPopularity:{type:String},
         itemVoteAverage:{type:String},
         itemVoteCount:{type:String},   
+        createdTime: { type: String }
     }],
     favoritesActor: [{
         itemId: { type: String },
@@ -23,7 +24,8 @@ const UserSchema = new mongoose.Schema({
         itemReleaseDay:{type:Date},
         itemReview:{type:String},
         itemPopularity:{type:String},
-        itemKnowFor:{type:String}
+        itemKnowFor:{type:String},
+        createdTime: { type: String }
     }],
     recentlyViewed: [{
         itemId: { type: String ,require:true},
@@ -39,6 +41,7 @@ const UserSchema = new mongoose.Schema({
         itemRating: { type: Number },
         itemImg: { type: String },
         itemName: { type: String },
+        createdTime: { type: String }
 
           
     }]
