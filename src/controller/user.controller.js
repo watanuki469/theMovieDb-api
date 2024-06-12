@@ -265,7 +265,7 @@ const addRecentlyViewed = async (req, res) => {
 
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
-      return user.recentlyViewed[existingIndex].createdTime = createdTime;
+      user.recentlyViewed[existingIndex].createdTime = createdTime;
     } else {
       user.recentlyViewed.push({
         itemId: movieId,
@@ -274,9 +274,9 @@ const addRecentlyViewed = async (req, res) => {
         itemType: movieType,
         createdTime: createdTime
       });
-      await user.save();
-      return res.json({ recentlyViewed: user.recentlyViewed });
     }
+    await user.save();
+    return res.json({ recentlyViewed: user.recentlyViewed });
   } catch (error) {
     console.error('Error handling recently view list:', error);
     return res.status(500).json({ message: 'Something went wrong.' });
