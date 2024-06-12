@@ -41,9 +41,7 @@ const UserSchema = new mongoose.Schema({
         itemRating: { type: Number },
         itemImg: { type: String },
         itemName: { type: String },
-        createdTime: { type: String }
-
-          
+        createdTime: { type: String }    
     }]
 });
 

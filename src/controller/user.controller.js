@@ -265,10 +265,7 @@ const addRecentlyViewed = async (req, res) => {
 
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
-      // return res.json({ recentlyViewed: user.recentlyViewed });
-      return
-      user.recentlyViewed[existingIndex]
-      // stop here
+      return user.recentlyViewed[existingIndex].createdTime = createdTime;
     } else {
       user.recentlyViewed.push({
         itemId: movieId,
@@ -360,7 +357,7 @@ const addRating = async (req, res) => {
     if (existingRatingIndex !== -1) {
       user.rating[existingRatingIndex].itemRating = itemRating;
     } else {
-      user.rating.push({ itemId, itemType, itemRating, itemImg, itemName,createdTime });
+      user.rating.push({ itemId, itemType, itemRating, itemImg, itemName, createdTime });
     }
 
     await user.save();
