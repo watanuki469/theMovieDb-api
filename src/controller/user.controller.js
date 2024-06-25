@@ -25,8 +25,7 @@ const signUp = async (req, res) => {
 
     return res.json(newUser);
   } catch (error) {
-    console.error('Error during user registration:', error);
-    return res.json({ message: 'An error occurred during user registration.' });
+    return res.json({ message: error });
   }
 };
 

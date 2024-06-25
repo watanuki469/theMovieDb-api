@@ -1,13 +1,12 @@
-// const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-const BirthDayModel = require('../models/Birthdate.Model');
+const UserModel = require('../models/Review.Model');
 
 
-const addBirthdate = async (req, res) => {
-  const { itemName,itemImg,itemAge} = req.body;
+const addReview = async (req, res) => {
+  const { itemEmail,itemDisplayName,itemName,itemImg,itemAge} = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
