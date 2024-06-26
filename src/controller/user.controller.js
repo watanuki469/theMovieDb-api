@@ -264,7 +264,9 @@ const addRecentlyViewed = async (req, res) => {
 
     const existingIndex = user.recentlyViewed.findIndex(fav => fav.itemId == movieId);
     if (existingIndex !== -1) {
+      user.recentlyViewed[existingIndex].itemName = movieName
       user.recentlyViewed[existingIndex].createdTime = createdTime;
+
     } else {
       user.recentlyViewed.push({
         itemId: movieId,
