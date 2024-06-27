@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String },
     favorites: [{
         itemId: { type: String },
-        itemType: { type: String, enum: ['movie', 'tv'] },
+        itemType: { type: String, enum: ['Movie', 'Tv'] },
         itemName: { type: String },       
         itemImg:{type:String},
         itemReleaseDay:{type:Date},
@@ -31,13 +31,13 @@ const UserSchema = new mongoose.Schema({
         itemId: { type: String ,require:true},
         itemName: { type: String },       
         itemImg:{type:String},
-        itemType: { type: String, enum: ['movie', 'tv','person'] },
+        itemType: { type: String, enum: ['Movie', 'TV','Person'] },
         createdTime: { type: String }
 
     }],
     rating: [{
         itemId: { type: String },
-        itemType: { type: String, enum: ['movie', 'tv'] },
+        itemType: { type: String, enum: ['Movie', 'TV'] },
         itemRating: { type: Number },
         itemImg: { type: String },
         itemName: { type: String },
