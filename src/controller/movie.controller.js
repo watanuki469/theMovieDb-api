@@ -6,7 +6,7 @@ const ReviewsModel = require('../models/Review.Model');
 
 
 const addReview = async (req, res) => {
-  const { itemId,itemName,itemEmail, itemDisplayName, itemContent, itemRating, itemLike, itemDislike } = req.body;
+  const { itemId,itemName,itemEmail, itemDisplayName, itemContent, itemLike, itemDislike } = req.body;
 
   try {
     let review = await ReviewsModel.findOne({ itemId });
@@ -19,7 +19,7 @@ const addReview = async (req, res) => {
         itemId,
         itemName,
         reviews: [
-          { itemEmail, itemDisplayName, itemContent, itemRating, itemLike, itemDislike, createdTime}
+          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime}
         ],
         totalLikes: itemLike,
         totalDislikes: itemDislike
@@ -30,9 +30,6 @@ const addReview = async (req, res) => {
         itemEmail,
         itemDisplayName,
         itemContent, 
-        itemRating,
-        itemLike,
-        itemDislike,
         createdTime
       });
 
