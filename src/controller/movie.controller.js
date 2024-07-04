@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-
 const ReviewsModel = require('../models/Review.Model');
 
-
 const addReview = async (req, res) => {
-  const { itemId,itemName,itemEmail, itemDisplayName, itemContent, itemLike, itemDislike } = req.body;
+  const { itemId, itemName, itemEmail, itemDisplayName, itemContent, itemLike, itemDislike } = req.body;
 
   try {
     let review = await ReviewsModel.findOne({ itemId });
@@ -19,7 +17,7 @@ const addReview = async (req, res) => {
         itemId,
         itemName,
         reviews: [
-          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime}
+          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime }
         ],
         totalLikes: itemLike,
         totalDislikes: itemDislike
@@ -29,16 +27,13 @@ const addReview = async (req, res) => {
       review.reviews.push({
         itemEmail,
         itemDisplayName,
-        itemContent, 
+        itemContent,
         createdTime
       });
 
-      // Recalculate total likes and dislikes
       review.totalLikes += itemLike;
       review.totalDislikes += itemDislike;
     }
-
-    // Save the updated review data
     await review.save();
 
     return res.json({ message: 'Review added successfully', review });
@@ -46,8 +41,34 @@ const addReview = async (req, res) => {
     return res.json({ message: error.message });
   }
 }
+const getUserView = async (req, res) => {
+  const { itemId, itemEmail } = req.body;
 
+  try {
+    // Find the review with the specified itemId
+    const review = await ReviewsModel.findOne({ itemId });
+
+    if (!review) {
+      // If no review is found with the given itemId, return a not found message
+      return res.json({ message: `No reviews found` });
+    }
+
+    // Find the specific user's review within the reviews array
+    const userReview = review.reviews.find(r => r.itemEmail === itemEmail);
+
+    if (!userReview) {
+      // If no review is found by the specified user, return a not found message
+      return res.status(404).json({ message: 'No review found for this user.' });
+    }
+
+    // Return the user's review
+    return res.json({ message: 'User review found', userReview });
+  } catch (error) {
+    // Handle any errors that occurred during the database query
+    return res.status(500).json({ message: error.message });
+  }
+}
 
 module.exports = {
-  addReview
+  addReview, getUserView
 };
