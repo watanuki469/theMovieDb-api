@@ -42,7 +42,7 @@ const addReview = async (req, res) => {
   }
 }
 const getUserView = async (req, res) => {
-  const { itemId, itemEmail } = req.body;
+  const { itemId, itemEmail } = req.params;
 
   try {
     // Find the review with the specified itemId
