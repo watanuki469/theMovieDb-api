@@ -4,7 +4,7 @@ const axios = require('axios');
 const ReviewsModel = require('../models/Review.Model');
 
 const addReview = async (req, res) => {
-  const { itemId, itemName, itemEmail, itemDisplayName, itemContent, itemLike, itemDislike } = req.body;
+  const { itemId, itemName, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
     let review = await ReviewsModel.findOne({ itemId });
@@ -17,10 +17,10 @@ const addReview = async (req, res) => {
         itemId,
         itemName,
         reviews: [
-          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime,itemLike,itemDislike }
+          { itemEmail, itemDisplayName, itemContent, createdTime, peopleLike: [], peopleDislike: [] }
         ],
-        totalLikes: itemLike,
-        totalDislikes: itemDislike
+        totalLikes: 0,
+        totalDislikes: 0
       });
     } else {
       // If review exists, push the new review data into the existing itemId
@@ -29,12 +29,10 @@ const addReview = async (req, res) => {
         itemDisplayName,
         itemContent,
         createdTime,
-        itemLike,
-        itemDislike
       });
 
-      review.totalLikes += itemLike;
-      review.totalDislikes += itemDislike;
+      review.totalLikes += 0;
+      review.totalDislikes += 0;
     }
     await review.save();
 
@@ -91,6 +89,40 @@ const getFullUserView = async (req, res) => {
   }
 }
 
+const addLikeToReview = async (req, res) => {
+  const { itemId, reviewId, itemEmail, itemDisplayName } = req.body;
+
+  try {
+    const review = await ReviewsModel.findOne({ itemId });
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    const singleReview = review.reviews.id(reviewId);
+    if (!singleReview) {
+      return res.status(404).json({ message: 'Single review not found' });
+    }
+
+    // Check if the user has already liked the review
+    const likeIndex = singleReview.peopleLike.findIndex(like => like.itemEmail === itemEmail);
+    if (likeIndex !== -1) {
+      // User has already liked the review, remove the like
+      singleReview.peopleLike.splice(likeIndex, 1);
+      review.totalLikes -= 1;
+      await review.save();
+      return res.json({ message: 'Like removed successfully', review });
+    } else {
+      // User has not liked the review, add the like
+      singleReview.peopleLike.push({ itemEmail, itemDisplayName });
+      review.totalLikes += 1;
+      await review.save();
+      return res.json({ message: 'Like added successfully', review });
+    }
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+}
+
 module.exports = {
-  addReview, getUserView,getFullUserView
+  addReview, getUserView, getFullUserView, addLikeToReview
 };

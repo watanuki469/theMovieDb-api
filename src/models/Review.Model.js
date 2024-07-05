@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 
+const PeopleEmotion = new mongoose.Schema({
+    itemEmail: { type: String },
+    itemDisplayName: { type: String },
+});
+
 const SingleReviewSchema = new mongoose.Schema({
     itemEmail: { type: String },
     itemDisplayName: { type: String },
     itemContent: { type: String },
-    itemRating: { type: Number },
-    itemLike: { type: Number },
-    itemDislike: { type: Number },
+    peopleLike: [PeopleEmotion],
+    peopleDislike: [PeopleEmotion],
     createdTime: { type: String }
 });
 
@@ -15,6 +19,7 @@ const ReviewSchema = new mongoose.Schema({
     itemName: { type: String, required: true },
     reviews: [SingleReviewSchema],
     totalLikes: { type: Number, default: 0 },
+    totalDislikes: { type: Number, default: 0 },
     createdTime: { type: String }
 });
 
