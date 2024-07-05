@@ -17,7 +17,7 @@ const addReview = async (req, res) => {
         itemId,
         itemName,
         reviews: [
-          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime }
+          { itemEmail, itemDisplayName, itemContent, itemLike, itemDislike, createdTime,itemLike,itemDislike }
         ],
         totalLikes: itemLike,
         totalDislikes: itemDislike
