@@ -69,6 +69,40 @@ const getUserView = async (req, res) => {
   }
 }
 
+const removeUserView = async (req, res) => {
+  const { itemId,  reviewId } = req.body;
+
+  try {
+    // Find the review with the specified itemId
+    const review = await ReviewsModel.findOne({ itemId });
+
+    if (!review) {
+      // If no review is found with the given itemId, return a not found message
+      return res.status(404).json({ message: 'No review found with this itemId.' });
+    }
+
+    // Find the index of the user's review within the reviews array
+    const userReviewIndex = review.reviews.findIndex(r => r._id.toString() === reviewId);
+
+    if (userReviewIndex === -1) {
+      // If no review is found by the specified user, return a not found message
+      return res.status(404).json({ message: 'No review found with this reviewId for the specified itemId.' });
+    }
+
+    // Remove the user's review from the reviews array
+    review.reviews.splice(userReviewIndex, 1);
+
+    // Save the updated review object back to the database
+    await review.save();
+
+    return res.json({ message: 'User review removed successfully', review });
+  } catch (error) {
+    // Handle any errors that occurred during the database query or update
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+
 const getFullUserView = async (req, res) => {
   const { itemId } = req.query;
 
@@ -124,5 +158,5 @@ const addLikeToReview = async (req, res) => {
 }
 
 module.exports = {
-  addReview, getUserView, getFullUserView, addLikeToReview
+  addReview, getUserView, getFullUserView, addLikeToReview,removeUserView
 };
