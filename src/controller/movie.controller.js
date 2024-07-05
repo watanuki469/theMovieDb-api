@@ -62,7 +62,7 @@ const getUserView = async (req, res) => {
     }
 
     // Return the user's review
-    return res.json({ message: 'User review found', userReview });
+    return res.json({ userReview:userReview });
   } catch (error) {
     // Handle any errors that occurred during the database query
     return res.status(500).json({ message: error.message });
