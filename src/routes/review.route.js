@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.post('/addMovieReview', movieController.addReview);
 router.get('/getUserReview', movieController.getUserView);
+router.get('/getFullReview', movieController.getFullUserView);
 
 module.exports = router;

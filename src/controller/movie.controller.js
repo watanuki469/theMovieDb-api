@@ -69,6 +69,26 @@ const getUserView = async (req, res) => {
   }
 }
 
+const getFullUserView = async (req, res) => {
+  const { itemId } = req.query;
+
+  try {
+    // Find the review with the specified itemId
+    const review = await ReviewsModel.findOne({ itemId });
+
+    if (!review) {
+      // If no review is found with the given itemId, return a not found message
+      return res.json({ message: `No reviews found` });
+    }
+
+    // Return the user's review
+    return res.json({ review });
+  } catch (error) {
+    // Handle any errors that occurred during the database query
+    return res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
-  addReview, getUserView
+  addReview, getUserView,getFullUserView
 };
