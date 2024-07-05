@@ -28,7 +28,9 @@ const addReview = async (req, res) => {
         itemEmail,
         itemDisplayName,
         itemContent,
-        createdTime
+        createdTime,
+        itemLike,
+        itemDislike
       });
 
       review.totalLikes += itemLike;
