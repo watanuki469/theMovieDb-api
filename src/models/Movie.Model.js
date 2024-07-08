@@ -23,6 +23,6 @@ const ReviewSchema = new mongoose.Schema({
     createdTime: { type: String }
 });
 
-const ReviewsModel = mongoose.model('movies', ReviewSchema);
+const MovieModel = mongoose.model('movies', ReviewSchema);
 
-module.exports = ReviewsModel;
+module.exports = MovieModel;

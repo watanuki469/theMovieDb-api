@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-const ReviewsModel = require('../models/Review.Model');
+const MovieModel = require('../models/Movie.Model');
 
 const addReview = async (req, res) => {
   const { itemId, itemName, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
-    let review = await ReviewsModel.findOne({ itemId });
+    let review = await MovieModel.findOne({ itemId });
     const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
     const createdTime = timezoneResponse.data.datetime;
 
     if (!review) {
       // If review does not exist, create a new review object
-      review = new ReviewsModel({
+      review = new MovieModel({
         itemId,
         itemName,
         reviews: [
@@ -46,7 +46,7 @@ const getUserView = async (req, res) => {
 
   try {
     // Find the review with the specified itemId
-    const review = await ReviewsModel.findOne({ itemId });
+    const review = await MovieModel.findOne({ itemId });
 
     if (!review) {
       // If no review is found with the given itemId, return a not found message
@@ -74,7 +74,7 @@ const removeUserView = async (req, res) => {
 
   try {
     // Find the review with the specified itemId
-    const review = await ReviewsModel.findOne({ itemId });
+    const review = await MovieModel.findOne({ itemId });
 
     if (!review) {
       // If no review is found with the given itemId, return a not found message
@@ -108,7 +108,7 @@ const getFullUserView = async (req, res) => {
 
   try {
     // Find the review with the specified itemId
-    const review = await ReviewsModel.findOne({ itemId });
+    const review = await MovieModel.findOne({ itemId });
 
     if (!review) {
       // If no review is found with the given itemId, return a not found message
@@ -127,7 +127,7 @@ const addLikeToReview = async (req, res) => {
   const { itemId, reviewId, itemEmail, itemDisplayName } = req.body;
 
   try {
-    const review = await ReviewsModel.findOne({ itemId });
+    const review = await MovieModel.findOne({ itemId });
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
     }
@@ -157,6 +157,40 @@ const addLikeToReview = async (req, res) => {
   }
 }
 
+const addDislikeToReview = async (req, res) => {
+  const { itemId, reviewId, itemEmail, itemDisplayName } = req.body;
+
+  try {
+    const review = await MovieModel.findOne({ itemId });
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    const singleReview = review.reviews.id(reviewId);
+    if (!singleReview) {
+      return res.status(404).json({ message: 'Single review not found' });
+    }
+
+    // Check if the user has already liked the review
+    const likeIndex = singleReview.peopleDislike.findIndex(like => like.itemEmail === itemEmail);
+    if (likeIndex !== -1) {
+      // User has already disLiked the review, remove 
+      singleReview.peopleDislike.splice(likeIndex, 1);
+      review.totalDislikes -= 1;
+      await review.save();
+      return res.json({ message: 'Dislike removed successfully', review });
+    } else {
+      // User has already disliked the review, add 
+      singleReview.peopleDislike.push({ itemEmail, itemDisplayName });
+      review.totalDislikes += 1;
+      await review.save();
+      return res.json({ message: 'Dislike added successfully', review });
+    }
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+}
+
 module.exports = {
-  addReview, getUserView, getFullUserView, addLikeToReview,removeUserView
+  addReview, getUserView, getFullUserView, addLikeToReview,addDislikeToReview,removeUserView
 };

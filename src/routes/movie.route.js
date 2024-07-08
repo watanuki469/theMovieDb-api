@@ -4,10 +4,11 @@ const movieController = require("../controller/movie.controller");
 
 const router = express.Router();
 
-router.post('/addMovieReview', movieController.addReview);
+router.post('/addReview', movieController.addReview);
 router.get('/getUserReview', movieController.getUserView);
 router.get('/getFullReview', movieController.getFullUserView);
 router.post('/addReviewLike', movieController.addLikeToReview);
+router.post('/addReviewDislike', movieController.addDislikeToReview);
 router.post('/removeUserReview', movieController.removeUserView);
 
 
