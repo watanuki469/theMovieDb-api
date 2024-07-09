@@ -103,7 +103,7 @@ const getUserRating = async (req, res) => {
     if (!userRating) {
       return res.status(404).json({ message: 'No review found for this user.' });
     }
-    return res.json({ rating });
+    return res.json({ userRating });
 
   } catch (error) {
     return res.json({ message: error.message });
