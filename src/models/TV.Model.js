@@ -23,6 +23,7 @@ const SingleRatingSchema = new mongoose.Schema({
 const ReviewSchema = new mongoose.Schema({
     itemId: { type: String, required: true, unique: true },
     itemName: { type: String, required: true },
+    itemImg: { type: String, required: true },
     reviews: [SingleReviewSchema],
     ratings: [SingleRatingSchema],
     totalLikes: { type: Number, default: 0 },

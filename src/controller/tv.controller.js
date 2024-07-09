@@ -16,6 +16,7 @@ const addReview = async (req, res) => {
       review = new TVModel({
         itemId,
         itemName,
+        itemImg,
         reviews: [
           { itemEmail, itemDisplayName, itemContent, createdTime, peopleLike: [], peopleDislike: [] }
         ],
@@ -55,6 +56,7 @@ const addRating = async (req, res) => {
       rating = new TVModel({
         itemId,
         itemName,
+        itemImg,
         ratings: [
           { itemEmail, itemDisplayName, itemRating, createdTime }
         ],
@@ -90,10 +92,10 @@ const addRating = async (req, res) => {
   }
 };
 const getUserRating = async (req, res) => {
-  const { itemEmail } = req.query;
+  const { itemId } = req.query;
 
   try {
-    const rating = await TVModel.findOne({ itemEmail });
+    const rating = await TVModel.findOne({ itemId });
     if (!rating) {
       return res.json({ message: 'Item not found' });
     }
@@ -109,59 +111,45 @@ const getUserView = async (req, res) => {
   const { itemId, itemEmail } = req.query;
 
   try {
-    // Find the review with the specified itemId
     const review = await TVModel.findOne({ itemId });
 
     if (!review) {
-      // If no review is found with the given itemId, return a not found message
       return res.json({ message: `No reviews found` });
     }
 
-    // Find the specific user's review within the reviews array
     const userReview = review.reviews.find(r => r.itemEmail === itemEmail);
 
     if (!userReview) {
-      // If no review is found by the specified user, return a not found message
       return res.status(404).json({ message: 'No review found for this user.' });
     }
-
-    // Return the user's review
     return res.json({ userReview });
   } catch (error) {
-    // Handle any errors that occurred during the database query
     return res.status(500).json({ message: error.message });
   }
 }
 
 const removeUserView = async (req, res) => {
-  const { itemId,  reviewId } = req.body;
+  const { itemId, reviewId } = req.body;
 
   try {
-    // Find the review with the specified itemId
     const review = await TVModel.findOne({ itemId });
 
     if (!review) {
-      // If no review is found with the given itemId, return a not found message
       return res.status(404).json({ message: 'No review found with this itemId.' });
     }
 
-    // Find the index of the user's review within the reviews array
     const userReviewIndex = review.reviews.findIndex(r => r._id.toString() === reviewId);
 
     if (userReviewIndex === -1) {
-      // If no review is found by the specified user, return a not found message
       return res.status(404).json({ message: 'No review found with this reviewId for the specified itemId.' });
     }
 
-    // Remove the user's review from the reviews array
     review.reviews.splice(userReviewIndex, 1);
 
-    // Save the updated review object back to the database
     await review.save();
 
     return res.json({ message: 'User review removed successfully', review });
   } catch (error) {
-    // Handle any errors that occurred during the database query or update
     return res.status(500).json({ message: error.message });
   }
 }
@@ -256,5 +244,5 @@ const addDislikeToReview = async (req, res) => {
 }
 
 module.exports = {
-  addReview, getUserView, getFullUserView, addLikeToReview,addDislikeToReview,removeUserView,addRating,getUserRating
+  addReview, getUserView, getFullUserView, addLikeToReview, addDislikeToReview, removeUserView, addRating, getUserRating
 };
