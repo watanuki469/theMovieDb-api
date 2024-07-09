@@ -14,12 +14,20 @@ const SingleReviewSchema = new mongoose.Schema({
     createdTime: { type: String }
 });
 
+const SingleRatingSchema = new mongoose.Schema({
+    itemEmail: { type: String },
+    itemDisplayName: { type: String },
+    itemRating: { type: Number },  
+});
+
 const ReviewSchema = new mongoose.Schema({
     itemId: { type: String, required: true, unique: true },
     itemName: { type: String, required: true },
     reviews: [SingleReviewSchema],
+    ratings: [SingleRatingSchema],
     totalLikes: { type: Number, default: 0 },
     totalDislikes: { type: Number, default: 0 },
+    ratingAverage: { type: Number, default: 0 },
     createdTime: { type: String }
 });
 

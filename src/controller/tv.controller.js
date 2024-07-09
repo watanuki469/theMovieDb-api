@@ -41,6 +41,70 @@ const addReview = async (req, res) => {
     return res.json({ message: error.message });
   }
 }
+
+const addRating = async (req, res) => {
+  const { itemId, itemName, itemEmail, itemDisplayName, itemRating } = req.body;
+
+  try {
+    let rating = await TVModel.findOne({ itemId });
+    const timezoneResponse = await axios.get("http://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh");
+    const createdTime = timezoneResponse.data.datetime;
+
+    if (!rating) {
+      // If rating does not exist, create a new review object
+      rating = new TVModel({
+        itemId,
+        itemName,
+        ratings: [
+          { itemEmail, itemDisplayName, itemRating, createdTime }
+        ],
+        ratingAverage: itemRating
+      });
+    } else {
+      // Check if the user has already rated this item
+      const userRating = rating.ratings.find(r => r.itemEmail === itemEmail);
+
+      if (!userRating) {
+        // If the user has not rated, add the new rating
+        rating.ratings.push({
+          itemEmail,
+          itemDisplayName,
+          itemRating,
+          createdTime
+        });
+      } else {
+        // If the user has already rated, update the existing rating
+        userRating.itemRating = itemRating;
+        userRating.createdTime = createdTime;
+      }
+
+      // Recalculate the average rating
+      const totalRating = rating.ratings.reduce((sum, r) => sum + r.itemRating, 0);
+      rating.ratingAverage = totalRating / rating.ratings.length;
+    }
+
+    await rating.save();
+    return res.json({ message: 'Rating added/updated successfully', rating });
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+};
+const getUserRating = async (req, res) => {
+  const { itemEmail } = req.query;
+
+  try {
+    const rating = await TVModel.findOne({ itemEmail });
+    if (!rating) {
+      return res.json({ message: 'Item not found' });
+    }
+
+    return res.json({ message: 'User rating found', rating });
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+};
+
+
 const getUserView = async (req, res) => {
   const { itemId, itemEmail } = req.query;
 
@@ -192,5 +256,5 @@ const addDislikeToReview = async (req, res) => {
 }
 
 module.exports = {
-  addReview, getUserView, getFullUserView, addLikeToReview,addDislikeToReview,removeUserView
+  addReview, getUserView, getFullUserView, addLikeToReview,addDislikeToReview,removeUserView,addRating,getUserRating
 };

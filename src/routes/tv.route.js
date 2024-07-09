@@ -10,6 +10,9 @@ router.get('/getFullReview', TVController.getFullUserView);
 router.post('/addReviewLike', TVController.addLikeToReview);
 router.post('/addReviewDislike', TVController.addDislikeToReview);
 router.post('/removeUserReview', TVController.removeUserView);
+router.post('/addRating', TVController.addRating);
+router.get('/getUserRating', TVController.getUserRating);
+
 
 
 module.exports = router;
