@@ -92,7 +92,7 @@ const addRating = async (req, res) => {
   }
 };
 const getUserRating = async (req, res) => {
-  const { itemId,itemEmail } = req.query;
+  const { itemId } = req.query;
 
   try {
     const rating = await TVModel.findOne({ itemId });
