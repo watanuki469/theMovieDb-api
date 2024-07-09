@@ -307,7 +307,7 @@ const getRecentlyViewed = async (req, res) => {
 }
 
 const removeRecentlyViewed = async (req, res) => {
-  const { email, movieId, movieType, removeAll } = req.body; // Assuming req.body instead of req.query
+  const { email, movieId, movieType, removeAll } = req.body; 
 
   try {
     const user = await UserModel.findOne({ email });
@@ -389,7 +389,7 @@ const getRating = async (req, res) => {
   }
 }
 const removeRating = async (req, res) => {
-  const { email, movieId, movieType } = req.body; // Assuming req.body instead of req.query
+  const { email, movieId, movieType } = req.body; 
 
   try {
     const user = await UserModel.findOne({ email });

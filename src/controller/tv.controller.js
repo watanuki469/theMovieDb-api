@@ -44,7 +44,7 @@ const addReview = async (req, res) => {
 }
 
 const addRating = async (req, res) => {
-  const { itemId, itemName, itemEmail, itemDisplayName, itemRating } = req.body;
+  const { itemId, itemName,itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
 
   try {
     let rating = await TVModel.findOne({ itemId });
@@ -99,11 +99,8 @@ const getUserRating = async (req, res) => {
     if (!rating) {
       return res.json({ message: 'Item not found' });
     }
-    const userRating = rating.ratings.find(r => r.itemEmail === itemEmail);
-    if (!userRating) {
-      return res.status(404).json({ message: 'No review found for this user.' });
-    }
-    return res.json({ userRating });
+  
+    return res.json({ rating });
 
   } catch (error) {
     return res.json({ message: error.message });
