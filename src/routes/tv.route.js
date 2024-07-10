@@ -13,5 +13,7 @@ router.post('/removeUserReview', TVController.removeUserView);
 router.post('/addRating', TVController.addRating);
 router.get('/getUserRating', TVController.getUserRating);
 router.get('/getFullRating', TVController.getFullRating);
+router.post('/removeRating', TVController.removeUserRating);
+
 
 module.exports = router;

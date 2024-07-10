@@ -129,7 +129,31 @@ const getFullRating = async (req, res) => {
     return res.json({ message: error.message });
   }
 };
+const removeUserRating = async (req, res) => {
+  const { itemId, ratingId } = req.body;
 
+  try {
+    const rating = await TVModel.findOne({ itemId });
+ 
+    if (!rating) {
+      return res.status(404).json({ message: 'No rating found with this itemId.' });
+    }
+
+    const userRatingIndex = rating.ratings.findIndex(r => r._id.toString() === ratingId);
+
+    if (userRatingIndex === -1) {
+      return res.status(404).json({ message: 'No rating found with this ratingId for the specified itemId.' });
+    }
+
+    rating.ratings.splice(userRatingIndex, 1);
+
+    await rating.save();
+
+    return res.json({ message: 'User rating removed successfully', rating });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
 
 const getUserView = async (req, res) => {
   const { itemId, itemEmail } = req.query;
@@ -268,5 +292,5 @@ const addDislikeToReview = async (req, res) => {
 
 module.exports = {
   addReview, getUserView, getFullUserView, addLikeToReview, addDislikeToReview, removeUserView, addRating, getUserRating,
-  getFullRating
+  getFullRating,removeUserRating
 };
