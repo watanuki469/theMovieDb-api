@@ -4,7 +4,7 @@ const axios = require('axios');
 const TVModel = require('../models/TV.Model');
 
 const addReview = async (req, res) => {
-  const { itemId, itemName,itemTMDbRating,itemTMDbRatingCount,itemTMDbReleaseDay,itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
+  const { itemId, itemName, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
     let review = await TVModel.findOne({ itemId });
@@ -48,7 +48,7 @@ const addReview = async (req, res) => {
 }
 
 const addRating = async (req, res) => {
-  const { itemId, itemName,itemTMDbRating,itemTMDbRatingCount,itemTMDbReleaseDay,itemTMDbRunTime, itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
+  const { itemId, itemName, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
 
   try {
     let rating = await TVModel.findOne({ itemId });
@@ -64,7 +64,7 @@ const addRating = async (req, res) => {
         itemTMDbRating,
         itemTMDbRatingCount,
         itemTMDbReleaseDay,
-        itemTMDbRunTime, 
+        itemTMDbRunTime,
         ratings: [
           { itemEmail, itemDisplayName, itemRating, createdTime }
         ],
@@ -99,41 +99,37 @@ const addRating = async (req, res) => {
     return res.json({ message: error.message });
   }
 };
+
 const getUserRating = async (req, res) => {
-  const { itemId } = req.query;
+  const { itemEmail } = req.query;
 
   try {
-    const rating = await TVModel.findOne({ itemId });
-    if (!rating) {
+    const ratings = await TVModel.find({ itemEmail });
+    if (ratings.length === 0) {
       return res.json({ message: 'Item not found' });
     }
-  
-    return res.json({ rating });
+
+    return res.json({ ratings });
 
   } catch (error) {
     return res.json({ message: error.message });
   }
 };
 
-const getSingleUserRating = async (req, res) => {
-  const { itemId } = req.query;
+
+const getFullRating = async (req, res) => {
+  const { itemEmail } = req.query;
 
   try {
-    const rating = await TVModel.findOne({ itemId });
-    if (!rating) {
-      return res.json({ message: 'Item not found' });
-    }
-    const userRating = rating.ratings.find(r => r.itemEmail === itemEmail);
-    if(!userRating){
-      return res.status(404).json({ message: 'No rating found for this user.' });
-    }
-     
-    return res.json({ rating });
+    TVModel.find({ "ratings.itemEmail": itemEmail }).then(
+      tvs => res.json(tvs)
+    ).catch(err => res.json(err));
 
   } catch (error) {
     return res.json({ message: error.message });
   }
 };
+
 
 const getUserView = async (req, res) => {
   const { itemId, itemEmail } = req.query;
@@ -181,7 +177,6 @@ const removeUserView = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 }
-
 
 const getFullUserView = async (req, res) => {
   const { itemId } = req.query;
@@ -272,5 +267,6 @@ const addDislikeToReview = async (req, res) => {
 }
 
 module.exports = {
-  addReview, getUserView, getFullUserView, addLikeToReview, addDislikeToReview, removeUserView, addRating, getUserRating
+  addReview, getUserView, getFullUserView, addLikeToReview, addDislikeToReview, removeUserView, addRating, getUserRating,
+  getFullRating
 };
