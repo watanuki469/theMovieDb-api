@@ -139,7 +139,7 @@ const removeUserRating = async (req, res) => {
       return res.status(404).json({ message: 'No rating found with this itemId.' });
     }
 
-    const userRatingIndex = rating.ratings.findIndex(r => r._id.toString() === ratingId);
+    const userRatingIndex = rating.ratings.findIndex(r => r._id.toString() == ratingId);
 
     if (userRatingIndex === -1) {
       return res.status(404).json({ message: 'No rating found with this ratingId for the specified itemId.' });
