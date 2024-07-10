@@ -4,7 +4,7 @@ const axios = require('axios');
 const TVModel = require('../models/TV.Model');
 
 const addReview = async (req, res) => {
-  const { itemId, itemName, itemEmail, itemDisplayName, itemContent } = req.body;
+  const { itemId, itemName,itemTMDbRating,itemTMDbRatingCount,itemTMDbReleaseDay,itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
     let review = await TVModel.findOne({ itemId });
@@ -17,6 +17,10 @@ const addReview = async (req, res) => {
         itemId,
         itemName,
         itemImg,
+        itemTMDbRating,
+        itemTMDbRatingCount,
+        itemTMDbReleaseDay,
+        itemTMDbRunTime,
         reviews: [
           { itemEmail, itemDisplayName, itemContent, createdTime, peopleLike: [], peopleDislike: [] }
         ],
@@ -44,7 +48,7 @@ const addReview = async (req, res) => {
 }
 
 const addRating = async (req, res) => {
-  const { itemId, itemName,itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
+  const { itemId, itemName,itemTMDbRating,itemTMDbRatingCount,itemTMDbReleaseDay,itemTMDbRunTime, itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
 
   try {
     let rating = await TVModel.findOne({ itemId });
@@ -57,6 +61,10 @@ const addRating = async (req, res) => {
         itemId,
         itemName,
         itemImg,
+        itemTMDbRating,
+        itemTMDbRatingCount,
+        itemTMDbReleaseDay,
+        itemTMDbRunTime, 
         ratings: [
           { itemEmail, itemDisplayName, itemRating, createdTime }
         ],
@@ -100,6 +108,26 @@ const getUserRating = async (req, res) => {
       return res.json({ message: 'Item not found' });
     }
   
+    return res.json({ rating });
+
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+};
+
+const getSingleUserRating = async (req, res) => {
+  const { itemId } = req.query;
+
+  try {
+    const rating = await TVModel.findOne({ itemId });
+    if (!rating) {
+      return res.json({ message: 'Item not found' });
+    }
+    const userRating = rating.ratings.find(r => r.itemEmail === itemEmail);
+    if(!userRating){
+      return res.status(404).json({ message: 'No rating found for this user.' });
+    }
+     
     return res.json({ rating });
 
   } catch (error) {

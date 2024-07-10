@@ -20,10 +20,14 @@ const SingleRatingSchema = new mongoose.Schema({
     itemRating: { type: Number },  
 });
 
-const ReviewSchema = new mongoose.Schema({
+const TVSchema = new mongoose.Schema({
     itemId: { type: String, required: true, unique: true },
     itemName: { type: String, required: true },
     itemImg: { type: String},
+    itemTMDbRating: { type: String},
+    itemTMDbRatingCount: { type: String},
+    itemTMDbReleaseDay: { type: String},
+    itemTMDbRunTime: { type: String},
     reviews: [SingleReviewSchema],
     ratings: [SingleRatingSchema],
     totalLikes: { type: Number, default: 0 },
@@ -32,6 +36,6 @@ const ReviewSchema = new mongoose.Schema({
     createdTime: { type: String }
 });
 
-const TVModel = mongoose.model('tv', ReviewSchema);
+const TVModel = mongoose.model('tv', TVSchema);
 
 module.exports = TVModel;
