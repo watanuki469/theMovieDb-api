@@ -13,16 +13,28 @@ const SingleReviewSchema = new mongoose.Schema({
     peopleDislike: [PeopleEmotion],
     createdTime: { type: String }
 });
+const SingleRatingSchema = new mongoose.Schema({
+    itemEmail: { type: String },
+    itemDisplayName: { type: String },
+    itemRating: { type: Number },  
+});
 
-const ReviewSchema = new mongoose.Schema({
+const MovieSchema = new mongoose.Schema({
     itemId: { type: String, required: true, unique: true },
     itemName: { type: String, required: true },
+    itemImg: { type: String},
+    itemTMDbRating: { type: String},
+    itemTMDbRatingCount: { type: String},
+    itemTMDbReleaseDay: { type: String},
+    itemTMDbRunTime: { type: String},
     reviews: [SingleReviewSchema],
+    ratings: [SingleRatingSchema],
     totalLikes: { type: Number, default: 0 },
     totalDislikes: { type: Number, default: 0 },
+    ratingAverage: { type: Number, default: 0 },
     createdTime: { type: String }
 });
 
-const MovieModel = mongoose.model('movies', ReviewSchema);
+const MovieModel = mongoose.model('movies', MovieSchema);
 
 module.exports = MovieModel;
