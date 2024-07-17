@@ -104,8 +104,8 @@ const getUserRating = async (req, res) => {
   const { itemEmail } = req.query;
 
   try {
-    const ratings = await TVModel.find({ itemEmail });
-    if (ratings.length === 0) {
+    const ratings = await TVModel.findOne({ itemEmail });
+    if (!ratings) {
       return res.json({ message: 'Item not found' });
     }
 
@@ -115,7 +115,6 @@ const getUserRating = async (req, res) => {
     return res.json({ message: error.message });
   }
 };
-
 
 const getFullRating = async (req, res) => {
   const { itemEmail } = req.query;

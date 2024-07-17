@@ -18,6 +18,7 @@ const SingleRatingSchema = new mongoose.Schema({
     itemEmail: { type: String },
     itemDisplayName: { type: String },
     itemRating: { type: Number },  
+    createdTime: { type: String }
 });
 
 const TVSchema = new mongoose.Schema({

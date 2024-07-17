@@ -1,11 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const userRoutes = require('./src/routes'); // Corrected path
-const TVModel = require('./src/models/TV.Model');
-
-
-
+const userRoutes = require('./src/routes'); 
 const app = express();
 const corsOptions = {
     origin: 'http://127.0.0.1:5173',
@@ -29,13 +25,6 @@ app.use("/api", userRoutes);
 app.get("/", (req, res) => {
     res.json("Welcome to Vasiliev Movie Database");
 });
-
-// app.get('/tvs/:email', async (req, res) => {
-//     const email = req.params.email;
-//     TVModel.find({ "ratings.itemEmail": email }).then(
-//         tvs => res.json(tvs)
-//     ).catch(err => res.json(err));
-// });
 
 
 app.listen(3000, () => {
