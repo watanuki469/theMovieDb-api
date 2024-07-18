@@ -4,7 +4,7 @@ const axios = require('axios');
 const TVModel = require('../models/TV.Model');
 
 const addReview = async (req, res) => {
-  const { itemId, itemName, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
+  const { itemId, itemName,itemImg, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
     let review = await TVModel.findOne({ itemId });
@@ -48,7 +48,7 @@ const addReview = async (req, res) => {
 }
 
 const addRating = async (req, res) => {
-  const { itemId, itemName, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemImg, itemEmail, itemDisplayName, itemRating } = req.body;
+  const { itemId, itemName, itemImg,itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime,  itemEmail, itemDisplayName, itemRating } = req.body;
 
   try {
     let rating = await TVModel.findOne({ itemId });

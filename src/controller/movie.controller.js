@@ -4,7 +4,7 @@ const axios = require('axios');
 const MovieModel = require('../models/Movie.Model');
 
 const addReview = async (req, res) => {
-  const { itemId, itemName, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
+  const { itemId, itemName,itemImg, itemTMDbRating, itemTMDbRatingCount, itemTMDbReleaseDay, itemTMDbRunTime, itemEmail, itemDisplayName, itemContent } = req.body;
 
   try {
     let review = await MovieModel.findOne({ itemId });
