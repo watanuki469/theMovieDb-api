@@ -4,7 +4,7 @@ const cors = require('cors');
 const userRoutes = require('./src/routes'); 
 const app = express();
 const corsOptions = {
-    origin: 'https://themoviedb-five.vercel.app',
+    origin: 'http://127.0.0.1:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
